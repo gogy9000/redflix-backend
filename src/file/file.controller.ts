@@ -14,7 +14,7 @@ export class FileController {
   constructor(private readonly FileService: FileService) {}
   @Post()
   @Auth('user')
-  @UseInterceptors(FileInterceptor('image'))
+  @UseInterceptors(FileInterceptor('file'))
   async upload(
     @UploadedFile() file: Express.Multer.File,
     @Query('folder') folder?: string

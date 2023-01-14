@@ -15,7 +15,7 @@ export class FileService {
       files.map(async (file) => {
         await writeFile(`${uploadsFolder}/${file.originalname}`, file.buffer)
         return {
-          url: `/uploads/${uploadsFolder}/${file.originalname}`,
+          url: `/uploads/${folder}/${file.originalname}`,
           name: file.originalname,
         }
       })

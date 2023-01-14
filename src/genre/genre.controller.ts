@@ -12,8 +12,6 @@ import {
 } from '@nestjs/common'
 import { Auth } from '../auth/decorators/auth.decorator'
 import { IdInvalidationPipe } from '../pipes/IdInvalidationPipe'
-import { User } from '../user/user-decorators/user.decorator'
-import { UpdateUserDto } from '../user/user-dto/update-user.dto'
 import { GenreService } from './genre.service'
 import { CreateGenreDto } from './dto/create-genre.dto'
 
