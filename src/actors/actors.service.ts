@@ -68,9 +68,27 @@ export class ActorsService {
         ],
       }
     }
-    return this.ActorModel.find(options)
-      .select('-updatedAt -__v')
-      .sort({ createdAt: 'desc' })
+    const docs = await this.ActorModel.aggregate()
+      .match(options)
+      .lookup({
+        from: 'Movie',
+        localField: '_id',
+        foreignField: 'actors',
+        as: 'movies',
+      })
+      .addFields({
+        countMovies: {
+          $size: '$movies',
+        },
+      })
+      .project({ __v: 0, updatedAt: 0, movies: 0 })
+      .sort({
+        createdAt: -1,
+      })
       .exec()
+    if (!docs) {
+      throw new HttpException('совпадений нет!', HttpStatus.NOT_FOUND)
+    }
+    return docs
   }
 }

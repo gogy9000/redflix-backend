@@ -13,7 +13,7 @@ import { ActorModel } from './actor.model'
       {
         typegooseClass: ActorModel,
         schemaOptions: {
-          collection: 'Actors',
+          collection: 'Actor',
         },
       },
     ]),
