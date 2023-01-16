@@ -5,6 +5,8 @@ import { UserModel } from './user.model'
 import { GetUserByIdDto } from './user-dto/get-user-by-id.dto'
 import { UpdateUserDto } from './user-dto/update-user.dto'
 import { genSalt, hash } from 'bcryptjs'
+import { Types } from 'mongoose'
+import { use } from 'passport'
 
 @Injectable()
 export class UserService {
@@ -52,12 +54,15 @@ export class UserService {
       return await user.save()
     }
   }
+
   async getCount() {
     return this.UserModel.find().count().exec()
   }
+
   async deleteUser(id: string) {
     return this.UserModel.findByIdAndDelete(id).exec()
   }
+
   async getAll(searchTerm?: string) {
     let options = {}
     if (searchTerm) {
@@ -69,5 +74,46 @@ export class UserService {
       .select('-password -updatedAt -__v')
       .sort({ createdAt: 'desc' })
       .exec()
+  }
+
+  async toggleFavorites(movieId: Types.ObjectId, user: UserModel) {
+    const { _id, favorites } = user
+
+    const doc = await this.UserModel.findByIdAndUpdate(
+      _id,
+      {
+        favorites: favorites?.includes(movieId)
+          ? favorites.filter((id) => String(id) !== String(movieId))
+          : [movieId, favorites && favorites],
+      },
+      { new: true }
+    ).exec()
+
+    if (!doc) {
+      throw new HttpException(
+        { for_users: 'нет такого фильма!', for_devs: doc },
+        HttpStatus.NOT_FOUND
+      )
+    }
+    return doc
+  }
+
+  async getFavoriteMovies(_id: Types.ObjectId) {
+    const docs = await this.UserModel.findById(_id, 'favorites')
+      .populate({
+        path: 'favorites',
+        populate: {
+          path: 'genres',
+        },
+      })
+      .exec()
+      .then((data) => data?.favorites)
+    if (!docs) {
+      throw new HttpException(
+        { for_users: 'нет такого фильма!', for_devs: docs },
+        HttpStatus.NOT_FOUND
+      )
+    }
+    return docs
   }
 }
