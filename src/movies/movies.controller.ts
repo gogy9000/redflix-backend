@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common'
 import { Auth } from '../auth/decorators/auth.decorator'
 import { IdInvalidationPipe } from '../pipes/IdInvalidationPipe'
-import { CreateActorsDto } from '../actors/create-actors.dto'
 import { MoviesService } from './movies.service'
 import { UpdateMovieDto } from './dto/update-movie.dto'
 import { Types } from 'mongoose'
@@ -21,6 +20,12 @@ import { GenreIdsDto } from './dto/genre-id.dto'
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly MoviesService: MoviesService) {}
+
+  @Auth('user')
+  @Get()
+  async getAll(@Query('searchTerm') searchTerm?: string) {
+    return this.MoviesService.getAll(searchTerm)
+  }
 
   @Auth('user')
   @Get('/by-slug/:slug')
@@ -40,12 +45,6 @@ export class MoviesController {
     { genreIds }: GenreIdsDto
   ) {
     return this.MoviesService.byGenres(genreIds)
-  }
-
-  @Auth('user')
-  @Get()
-  async getAll(@Query('searchTerm') searchTerm?: string) {
-    return this.MoviesService.getAll(searchTerm)
   }
 
   @Get('most-popular')

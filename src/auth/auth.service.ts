@@ -1,11 +1,16 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { AuthDto } from './auth-dto/auth.dto'
 import { InjectModel } from 'nestjs-typegoose'
 import { UserModel } from '../user/user.model'
 import { ModelType } from '@typegoose/typegoose/lib/types'
 import { genSalt, hash, compare } from 'bcryptjs'
 import { JwtService } from '@nestjs/jwt'
-import { CreateNewTokensDto } from './auth-dto/create-new-tokens.dto'
+import { RefreshTokenDto } from './auth-dto/refresh-token.dto'
 
 @Injectable()
 export class AuthService {
@@ -14,19 +19,24 @@ export class AuthService {
     @InjectModel(UserModel) private readonly UserModel: ModelType<UserModel>
   ) {}
 
-  async getNewTokens({ refreshToken }: CreateNewTokensDto) {
+  async getNewTokens({ refreshToken }: RefreshTokenDto) {
     if (!refreshToken) {
       throw new HttpException('нужен токен!', HttpStatus.BAD_REQUEST)
     }
     try {
       const result = await this.JwtService.verifyAsync(refreshToken)
+      if (!result) throw new UnauthorizedException('Invalid token or expired!')
+
       const user = await this.UserModel.findById(result._id)
+
       if (user) {
         const tokens = await this.issueTokenPair(String(user._id))
         return {
           user: this.returnUserFields(user),
           ...tokens,
         }
+      } else {
+        throw new UnauthorizedException('user not found')
       }
     } catch (e) {
       throw new HttpException(
