@@ -8,7 +8,10 @@ import {
 import { FileService } from './file.service'
 import { Auth } from '../auth/decorators/auth.decorator'
 import { FileInterceptor } from '@nestjs/platform-express'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 
+@ApiTags('Files')
+@ApiBearerAuth('JWT-auth')
 @Controller('files')
 export class FileController {
   constructor(private readonly FileService: FileService) {}

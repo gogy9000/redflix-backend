@@ -4,13 +4,11 @@ import {
   Delete,
   Get,
   Param,
-  Post,
   Put,
   Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common'
-import { GetUserByIdDto } from './user-dto/get-user-by-id.dto'
 import { UserService } from './user.service'
 import { Auth } from '../auth/decorators/auth.decorator'
 import { User } from './user-decorators/user.decorator'
@@ -18,7 +16,10 @@ import { UpdateUserDto } from './user-dto/update-user.dto'
 import { IdInvalidationPipe } from '../pipes/IdInvalidationPipe'
 import { Types } from 'mongoose'
 import { UserModel } from './user.model'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 
+@ApiTags('Users')
+@ApiBearerAuth('JWT-auth')
 @Controller('users')
 export class UserController {
   constructor(private readonly UserService: UserService) {}

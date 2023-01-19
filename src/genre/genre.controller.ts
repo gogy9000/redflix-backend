@@ -14,7 +14,10 @@ import { Auth } from '../auth/decorators/auth.decorator'
 import { IdInvalidationPipe } from '../pipes/IdInvalidationPipe'
 import { GenreService } from './genre.service'
 import { CreateGenreDto } from './dto/create-genre.dto'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 
+@ApiTags('Genres')
+@ApiBearerAuth('JWT-auth')
 @Controller('genres')
 export class GenreController {
   constructor(private readonly GenreService: GenreService) {}

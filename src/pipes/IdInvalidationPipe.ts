@@ -11,7 +11,10 @@ export class IdInvalidationPipe implements PipeTransform {
       return value
     }
     if (!Types.ObjectId.isValid(value)) {
-      throw new HttpException('не валидный id!', HttpStatus.BAD_REQUEST)
+      throw new HttpException(
+        `не валидный id: ${value}`,
+        HttpStatus.BAD_REQUEST
+      )
     }
     return value
   }

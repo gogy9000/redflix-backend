@@ -12,10 +12,12 @@ import {
 } from '@nestjs/common'
 import { Auth } from '../auth/decorators/auth.decorator'
 import { IdInvalidationPipe } from '../pipes/IdInvalidationPipe'
-import { CreateGenreDto } from '../genre/dto/create-genre.dto'
 import { ActorsService } from './actors.service'
 import { CreateActorsDto } from './create-actors.dto'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 
+@ApiTags('Actors')
+@ApiBearerAuth('JWT-auth')
 @Controller('actors')
 export class ActorsController {
   constructor(private readonly ActorsService: ActorsService) {}

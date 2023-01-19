@@ -15,7 +15,10 @@ export class RatingService {
   ) {}
 
   async getMovieValueByUser(movieId: Types.ObjectId, userId: Types.ObjectId) {
-    return this.RatingModel.findOne({ movieId, userId })
+    return this.RatingModel.findOne({
+      movieId,
+      userId,
+    })
       .select('value')
       .exec()
       .then((data) => (data ? data.value : 0))

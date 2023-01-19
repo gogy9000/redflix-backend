@@ -16,7 +16,10 @@ import { MoviesService } from './movies.service'
 import { UpdateMovieDto } from './dto/update-movie.dto'
 import { Types } from 'mongoose'
 import { GenreIdsDto } from './dto/genre-id.dto'
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 
+@ApiTags('Movies')
+@ApiBearerAuth('JWT-auth')
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly MoviesService: MoviesService) {}
