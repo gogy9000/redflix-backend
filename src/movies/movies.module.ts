@@ -19,5 +19,6 @@ import { MoviesService } from './movies.service'
     ]),
     ConfigModule,
   ],
+  exports: [MoviesService],
 })
 export class MoviesModule {}

@@ -10,6 +10,7 @@ import { GenreModule } from './genre/genre.module';
 import { FileModule } from './file/file.module';
 import { ActorsModule } from './actors/actors.module';
 import { MoviesModule } from './movies/movies.module';
+import { RatingModule } from './rating/rating.module';
 
 @Module({
   controllers: [AppController],
@@ -27,6 +28,7 @@ import { MoviesModule } from './movies/movies.module';
     FileModule,
     ActorsModule,
     MoviesModule,
+    RatingModule,
   ],
 })
 export class AppModule {}
