@@ -39,7 +39,7 @@ export class RatingService {
     const { value, movieId } = dto
 
     const newRating = await this.RatingModel.findOneAndUpdate(
-      { movies: movieId, users: userId },
+      { movieId: movieId, userId: userId },
       {
         movies: movieId,
         users: userId,
