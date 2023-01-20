@@ -10,7 +10,7 @@ interface TelegramOptions {
 export const getTelegramConfig = (): TelegramOptions => ({
   // https://api.telegram.org/bot5931196524:AAEvd3uA4hR_B-Xdmn-rra2NrvisYY3Bslk/getUpdates
   chatId: '1916519017',
-  token: '5931196524:AAEvd3uA4hR_B-Xdmn-rra2NrvisYY3Bslk',
+  token: process.env.TELEGRAMM_TOKEN || '',
 })
 
 @Injectable()

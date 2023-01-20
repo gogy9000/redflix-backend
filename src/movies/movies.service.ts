@@ -115,6 +115,7 @@ export class MoviesService {
       await this.sendNotification(dto)
       dto.isSendTelegram = true
     }
+    console.log(dto)
     const doc = await this.MovieModel.findByIdAndUpdate(_id, dto, {
       new: true,
     }).exec()
