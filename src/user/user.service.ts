@@ -77,14 +77,14 @@ export class UserService {
   }
 
   async toggleFavorites(movieId: Types.ObjectId, user: UserModel) {
-    const { _id, favorites } = user
+    const { _id, favorites = [] } = user
 
     const doc = await this.UserModel.findByIdAndUpdate(
       _id,
       {
         favorites: favorites?.includes(movieId)
           ? favorites.filter((id) => String(id) !== String(movieId))
-          : [movieId, favorites && favorites],
+          : [...favorites, movieId],
       },
       { new: true }
     ).exec()

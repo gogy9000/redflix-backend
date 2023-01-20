@@ -98,10 +98,10 @@ export class AuthService {
     const refreshToken = await this.JwtService.signAsync(data, {
       expiresIn: '15d',
     })
-    const AccessToken = await this.JwtService.signAsync(data, {
+    const accessToken = await this.JwtService.signAsync(data, {
       expiresIn: '1h',
     })
-    return { refreshToken, AccessToken }
+    return { refreshToken, accessToken }
   }
 
   returnUserFields(user: UserModel) {
