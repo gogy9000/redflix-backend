@@ -1,7 +1,5 @@
-import { Ref } from '@typegoose/typegoose'
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses'
-import { GenreModel } from '../../genre/genre.model'
-import { ActorModel } from '../../actors/actor.model'
+
 import {
   IsArray,
   IsBoolean,
@@ -24,24 +22,33 @@ export interface MovieModel {}
 
 export class UpdateMovieDto extends TimeStamps {
   @IsString()
+  @IsOptional()
   poster: string
   @IsString()
+  @IsOptional()
   bigPoster: string
   @IsString()
+  @IsOptional()
   title: string
   @IsString()
+  @IsOptional()
   slug: string
   @IsObject()
+  @IsOptional()
   parameters?: Parameters
   @IsString()
+  @IsOptional()
   videoUrl: string
   @IsArray()
   @IsString({ each: true })
+  @IsOptional()
   genres: string[]
   @IsArray()
   @IsString({ each: true })
+  @IsOptional()
   actors: string[]
   @IsOptional()
   @IsBoolean()
+  @IsOptional()
   isSendTelegram?: boolean
 }

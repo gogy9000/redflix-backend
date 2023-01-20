@@ -8,9 +8,9 @@ interface TelegramOptions {
 }
 
 export const getTelegramConfig = (): TelegramOptions => ({
-  // https://api.telegram.org/bot1201241240:token/getUpdates
-  chatId: '288642712',
-  token: '5070807616:AAGHWhiD9qTMz68gz6yccEXGRtY8x0ohOb0',
+  // https://api.telegram.org/bot5931196524:AAEvd3uA4hR_B-Xdmn-rra2NrvisYY3Bslk/getUpdates
+  chatId: '1916519017',
+  token: '5931196524:AAEvd3uA4hR_B-Xdmn-rra2NrvisYY3Bslk',
 })
 
 @Injectable()
@@ -20,16 +20,6 @@ export class TelegramService {
   constructor() {
     this.options = getTelegramConfig()
     this.bot = new Telegraf(this.options.token)
-  }
-  async sendMessage(
-    msg: string,
-    chatId: string = this.options.chatId,
-    options?: ExtraReplyMessage
-  ) {
-    await this.bot.telegram.sendMessage(chatId, msg, {
-      parse_mode: 'HTML',
-      ...options,
-    })
   }
   async sendPhoto(
     photo: string,
@@ -41,5 +31,15 @@ export class TelegramService {
       photo,
       msg ? { caption: msg } : {}
     )
+  }
+  async sendMessage(
+    msg: string,
+    options?: ExtraReplyMessage,
+    chatId: string = this.options.chatId
+  ) {
+    await this.bot.telegram.sendMessage(chatId, msg, {
+      parse_mode: 'HTML',
+      ...options,
+    })
   }
 }
