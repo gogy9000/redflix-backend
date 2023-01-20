@@ -3,11 +3,14 @@ import { InjectModel } from 'nestjs-typegoose'
 import { ModelType } from '@typegoose/typegoose/lib/types'
 import { GenreModel } from './genre.model'
 import { CreateGenreDto } from './dto/create-genre.dto'
+import { MoviesService } from '../movies/movies.service'
+import { ICollection } from './genre.interface'
 
 @Injectable()
 export class GenreService {
   constructor(
-    @InjectModel(GenreModel) private readonly GenreModel: ModelType<GenreModel>
+    @InjectModel(GenreModel) private readonly GenreModel: ModelType<GenreModel>,
+    private readonly MovieService: MoviesService
   ) {}
   async createGenre() {
     try {
@@ -76,7 +79,18 @@ export class GenreService {
   }
 
   async getCollections() {
-    const collections = await this.getAll()
-    return collections
+    const genres = await this.getAll()
+    return Promise.all(
+      genres.map(async (genre) => {
+        const movieByGenre = await this.MovieService.byGenres([genre._id])
+        const result: ICollection = {
+          _id: String(genre._id),
+          image: movieByGenre[0].bigPoster,
+          slug: genre.slug,
+          title: genre.name,
+        }
+        return result
+      })
+    )
   }
 }
