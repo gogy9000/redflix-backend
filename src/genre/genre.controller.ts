@@ -22,7 +22,6 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 export class GenreController {
   constructor(private readonly GenreService: GenreService) {}
 
-  @Auth('user')
   @Get()
   async getAll(@Query('searchTerm') searchTerm?: string) {
     return this.GenreService.getAll(searchTerm)

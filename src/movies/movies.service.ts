@@ -52,10 +52,14 @@ export class MoviesService {
     }
     return docs
   }
-  async getMostPopular() {
-    return this.MovieModel.find({ countOpened: { $gt: 0 } })
+  async getMostPopular(searchTerm?: string) {
+    let options = {}
+    if (searchTerm) {
+      options = { ...options, $or: [{ title: new RegExp(searchTerm, 'i') }] }
+    }
+    return this.MovieModel.find({ ...options, countOpened: { $gt: 0 } })
       .sort({ countOpened: -1 })
-      .populate('genres')
+      .populate('genres', 'name')
       .exec()
   }
   async updateCountOpened(slug: string) {

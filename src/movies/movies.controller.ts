@@ -16,7 +16,17 @@ import { MoviesService } from './movies.service'
 import { UpdateMovieDto } from './dto/update-movie.dto'
 import { Types } from 'mongoose'
 import { GenreIdsDto } from './dto/genre-id.dto'
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiProperty,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger'
+import { AuthResDto } from '../auth/auth-dto/response-dto/auth-res.dto'
+import { MovieModel } from './movie.model'
+import { MostPopularResponseDto } from './dto/response.dto/most-popular-response.dto'
 
 @ApiTags('Movies')
 @ApiBearerAuth('JWT-auth')
@@ -24,18 +34,18 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 export class MoviesController {
   constructor(private readonly MoviesService: MoviesService) {}
 
-  @Auth('user')
+  // @Auth('user')
   @Get()
   async getAll(@Query('searchTerm') searchTerm?: string) {
     return this.MoviesService.getAll(searchTerm)
   }
 
-  @Auth('user')
+  // @Auth('user')
   @Get('/by-slug/:slug')
   async getBySlug(@Param('slug') slug: string) {
     return await this.MoviesService.getBySlug(slug)
   }
-  @Auth('user')
+  // @Auth('user')
   @Get('by-actor/:actorId')
   async byActor(@Param('actorId', IdInvalidationPipe) actorId: Types.ObjectId) {
     return this.MoviesService.byActor(actorId)
@@ -49,10 +59,12 @@ export class MoviesController {
   ) {
     return this.MoviesService.byGenres(genreIds)
   }
-
+  @ApiResponse({ status: 200, type: [MostPopularResponseDto] })
+  @ApiOperation({ summary: 'get most popular movie' })
+  @ApiQuery({ name: 'searchTerm', type: String, required: false })
   @Get('most-popular')
-  async getMostPopular() {
-    return this.MoviesService.getMostPopular()
+  async getMostPopular(@Query('searchTerm') searchTerm: string) {
+    return this.MoviesService.getMostPopular(searchTerm)
   }
 
   @Put('update-count-opened')
